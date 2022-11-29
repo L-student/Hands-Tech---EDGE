@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang='pt-BR'>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+  <title>Experiência em Realidade Aumentada</title>
+  
+  
+  <script type="application/javascript" src="{{ url_for('static', filename='aframe-1.0.4.js')}}"></script>
+  <script type="application/javascript" src="{{url_for('static', filename='aframe-look-at-component.min.js')}}"></script>
+  <script type="application/javascript" src="{{url_for('static', filename='aframe-ar.min.js')}}"></script>
+  <script type="application/javascript" src="{{url_for('static', filename='communication.js')}}"></script> 
+  
+  <link rel="stylesheet" type="text/css" href= "{{url_for('static', filename='style.css')}}"/>
+</head>
+
+<body style="margin: 0; overflow: hidden;">
+  
+<a-scene
+          vr-mode-ui="enabled: false"
+          embedded
+          arjs="sourceType: webcam; debugUIEnabled: false;  detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
+>
+<a-marker type="barcode" value="6" smooth = "true" smoothcount = "1000" smoothdistance = "100" smooththreshold = "999">
+  <!--Tanque 1-->
+  <a-text position="4 0 -0.5" scale ="5 5 5" color="black" value="0cm" rotation = "-90 0 0 "></a-text>
+  <a-text id="tankpointer-A" position="4 0.3 -0.5" scale ="4 4 4" color="green" value="0cm" rotation="-90 0 0"></a-text>
+ 
+  <a-text position="4 0 -6" scale ="5 5 5" color="black" value="30cm" rotation="-90 0 0"></a-text>
+  <!--Tanque 2-->
+  <a-text position="4 0 6.7"  scale ="5 5 5" color="blue" value="0cm" rotation="-90 0 0"></a-text>
+  <a-text id="tankpointer-B" position="4 0.3 6.7" scale ="4 4 4" color="red" value="0cm" rotation="-90 0 0"></a-text>   
+  <a-text position="4 0 0.85"  scale ="5 5 5" color="blue" value="30cm" rotation="-90 0 0"></a-text>
+  
+  
+</a-marker>
+
+  <a-entity camera></a-entity>
+</a-scene>
+<div class='control'>
+
+  <p>
+    Setpoint (entre 0 e 30): <span id="valBox2"></span>
+  </p>
+
+  <p>
+    <input type="range" id="setpoint2" name="Setpoint2" min="0" max="30"   class = "slider" oninput="showVal3(this.value)"  onchange="showVal3(this.value)" list="my-datalist"/>
+    <datalist id="my-datalist" style="--list-length: 7;"><!--
+      ---><option>0</option><!--
+      ---><option>5</option><!--
+      ---><option>10</option><!--
+      ---><option>15</option><!--
+      ---><option>20</option><!--
+      ---><option>25</option><!--
+      ---><option>30</option><!--
+     ---></datalist>
+</p>
+<p><button id='ctrlbutton' class='Calcular'>Conectar</button></p>
+</div>
+  
+</body>
+<script>
+var button = setInterval(showVal3,400,document.getElementById("setpoint2").value);
+function updateTankOne(val){
+  var sceneEl=document.querySelector('a-scene');
+  var tankV=sceneEl.querySelector('#tankpointer-A');
+  var nVal = String(val+" cm");
+  tankV.setAttribute('value', nVal);
+  tankV.setAttribute('position',{x:4,y:0, z:((((-1)*(11/60)*val))-0.5)});
+}
+
+function updateTankTwo(val){
+  var sceneEl=document.querySelector('a-scene');
+  var tankV=sceneEl.querySelector('#tankpointer-B');
+  var nVal = String(val+" cm");
+  tankV.setAttribute('value', nVal);
+  tankV.setAttribute('position',{x:4,y:0, z:(((-0.195*val))+6.7)});
+}
+
+  function showVal3(newVal){
+    
+    
+    var setpoint = document.getElementById("setpoint2").value;
+    document.getElementById("valBox2").innerHTML = setpoint;
+    var url = 'https://172.20.9.110:5000/calculate_result'
+    var data ='Setpoint='+setpoint
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', url, true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function(){
+      if (xhr.readyState==4){
+        if (xhr.status == 200){
+            var stringData = xhr.responseText.split("|");
+            updateTankOne(stringData[1]);
+            updateTankTwo(stringData[3]);
+        }
+      }
+    };
+    xhr.send(data);
+  }
+</script>
+</html>

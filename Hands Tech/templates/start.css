@@ -1,0 +1,55 @@
+/*Google fonts*/
+/* <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;1,100;1,300&display=swap" rel="stylesheet"> */
+@import url('"https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;1,100;1,300&display=swap');
+/*GLOBAL*/
+*{
+	margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+a{
+	text-decoration: none;
+}
+header{
+	width: 100vw;
+    height: 100vh;
+    background-image: url(./image/first.png);
+    background-position: bottom;
+    background-size: cover;
+    display: flex;
+    align-items:center;
+    justify-content:left;
+}
+.botton-content {
+	padding:50px 400px;
+	background: linear-gradient(to right,rgba(192, 184, 184, 0.162) ,rgba(15, 15, 15, 0.123) ) ;;
+	margin-top: 300px;
+	margin-left: -700px;
+	margin-bottom: -310px;
+
+}
+.header-content{
+    margin-bottom: 200px;
+    color: whitesmoke;
+    text-align: left;
+    font-size:35px;
+	font-family:url(https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;1,100;1,300&display=swap);
+    width:550PX;
+    height:200px;
+    margin-left:110px;
+    letter-spacing:20;
+}
+.header-content h2{
+	margin-top: 20px;
+	margin-bottom: 100px;
+}
+.ctn {
+	padding: 20px 90px;
+	background:linear-gradient(0deg, rgba(108.00000116229057, 22.99999862909317, 104.60000440478325, 1) 0%,rgba(0, 159.0000057220459, 181.0000044107437, 1) 100%) ;
+	border-radius: 60px;
+	color: antiquewhite;
+	font-size: 25px ;
+	margin-left: 2px;
+}
